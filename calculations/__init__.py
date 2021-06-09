@@ -1,6 +1,6 @@
 avogadro = 6.02214076 * 10**23
 R = 8.31446261815324
-delta_map = {
+sigma_map = {
     "elastic scattering": 0.1,
     "radiation capture": 10 ** 6,
     "photonuclear reactions": 10 ** -3,
@@ -63,7 +63,7 @@ def barn_to_cm(barn: float):
 
 
 def length(interaction_type: str, n: float):
-    return 1/(barn_to_cm(delta_map[interaction_type]) * n)
+    return 1/(barn_to_cm(sigma_map[interaction_type]) * n)
 
 
 def amount_of_solid(p: float, M: float):

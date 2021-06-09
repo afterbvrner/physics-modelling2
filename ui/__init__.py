@@ -3,7 +3,7 @@ from calculations import *
 
 
 def neutron_interaction_options():
-    return list(delta_map.keys())
+    return list(sigma_map.keys())
 
 
 if __name__ == "__main__":
@@ -41,24 +41,27 @@ if __name__ == "__main__":
             window['-SECONDPARAM-'].update("")
             continue
 
-        if values["gas"] == 'true':
-            window['-OUTPUT-'].update(
-                str(length(
-                    values['-INTERACTIONSINPUT-'],
-                    amount_of_gas(
-                        float(values['-FIRSTPARAMINPUT-']),
-                        float(values['-SECONDPARAMINPUT-'])) * sum(parse_amount_of_atoms(values['-FORMULAINPUT-'])))
+        try:
+            if values["gas"]:
+                window['-OUTPUT-'].update(
+                    str(length(
+                        values['-INTERACTIONSINPUT-'],
+                        amount_of_gas(
+                            float(values['-FIRSTPARAMINPUT-']),
+                            float(values['-SECONDPARAMINPUT-'])) * sum(parse_amount_of_atoms(values['-FORMULAINPUT-']).values()))
+                    )
+                    + " centimeters"
                 )
-                + " centimeters"
-            )
-        else:
-            window['-OUTPUT-'].update(
-                str(length(
-                    values['-INTERACTIONSINPUT-'],
-                    amount_of_solid(
-                        float(values['-FIRSTPARAMINPUT-']),
-                        parse_molar_mass(values['-FORMULAINPUT-'])
-                    ) * sum(parse_amount_of_atoms(values['-FORMULAINPUT-']).values())))
-                + " centimeters"
-            )
+            else:
+                window['-OUTPUT-'].update(
+                    str(length(
+                        values['-INTERACTIONSINPUT-'],
+                        amount_of_solid(
+                            float(values['-FIRSTPARAMINPUT-']),
+                            parse_molar_mass(values['-FORMULAINPUT-'])
+                        ) * sum(parse_amount_of_atoms(values['-FORMULAINPUT-']).values())))
+                    + " centimeters"
+                )
+        except Exception:
+            sg.Popup("Something is wrong")
     window.close()
